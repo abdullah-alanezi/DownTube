@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Downloader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Download YouTube Video</h2>
+        
+        <form id="downloadForm" method="post" action="{% url 'main:home_page' %}" class="space-y-4">
+            {% csrf_token %}
+            
+            <div>
+                <label for="videoUrl" class="block text-sm font-medium text-gray-700">YouTube Video URL</label>
+                <input type="url" id="videoUrl" name="video_url" required 
+                    class="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <button type="submit" id="downloadButton" 
+                class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition flex items-center justify-center">
+                <span id="buttonText">Download</span>
+                <svg id="loadingIcon" class="hidden ml-2 w-5 h-5 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                </svg>
+            </button>
+        </form>
+
+        {% if message %}
+        <div class="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            {{ message }}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            {{ error }}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('downloadForm').addEventListener('submit', function() {
+            document.getElementById('downloadButton').disabled = true;
+            document.getElementById('buttonText').textContent = 'Downloading...';
+            document.getElementById('loadingIcon').classList.remove('hidden');
+        });
+    </script>
+
+</body>
+</html>
+
